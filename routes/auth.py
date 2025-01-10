@@ -502,6 +502,7 @@ def create_order_after_payment():
         for item in items:
             product_id = item.get('product_id')
             quantity = item.get('quantity')
+            product_name = item.get('product_name')
 
             if not product_id or not quantity:
                 return jsonify({"success": False, "message": "Product ID and quantity are required for each item"}), 400
@@ -516,9 +517,9 @@ def create_order_after_payment():
             total_item_price = price * quantity
 
             cursor.execute(
-                "INSERT INTO order_items (order_id, product_id, quantity, price, total_price) "
-                "VALUES (%s, %s, %s, %s, %s)",
-                (order_id, product_id, quantity, price, total_item_price)
+                "INSERT INTO order_items (order_id, product_id, product_name, quantity, price, total_price) "
+                "VALUES (%s, %s, %s,%s, %s, %s)",
+                (order_id, product_id,product_name, quantity, price, total_item_price)
             )
 
         cursor.execute("DELETE FROM cartitem WHERE user_id = %s", (user_id,))
